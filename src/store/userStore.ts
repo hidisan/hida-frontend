@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { getLoginUserUsingGet } from "@/api/userController";
 import ACCESS_ENUM from "@/access/accessEnum";
 
-export const useLoginUserStroe = defineStore("loginUser", () => {
+export const useLoginUserStore = defineStore("loginUser", () => {
   const loginUser = ref<API.LoginUserVO>({
     userName: "未登录",
   });
