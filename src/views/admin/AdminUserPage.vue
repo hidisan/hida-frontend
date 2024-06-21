@@ -6,10 +6,15 @@
     @submit="doSearch"
   >
     <a-form-item field="username" label="用户名">
-      <a-input v-model="searchParams.userName" placeholder="请输入用户名" />
+      <a-input
+        allow-clear
+        v-model="searchParams.userName"
+        placeholder="请输入用户名"
+      />
     </a-form-item>
     <a-form-item field="userProfile" label="用户简介">
       <a-input
+        allow-clear
         v-model="formSearchParams.userProfile"
         placeholder="请输入用户简介"
       />
@@ -34,6 +39,12 @@
     <template #userAvatar="{ record }">
       <a-img width="64" :src="record.userAvatar" />
     </template>
+    <template #createTime="{ record }">
+      {{ dayjs(record.createTime).format("YYYY-MM-DD HH:mm:ss") }}
+    </template>
+    <template #updateTime="{ record }">
+      {{ dayjs(record.updateTime).format("YYYY-MM-DD HH:mm:ss") }}
+    </template>
     <template #optional="{ record }">
       <a-space>
         <a-button status="danger" @click="doDelete(record)">删除</a-button>
@@ -50,6 +61,7 @@ import {
 } from "@/api/userController";
 import API from "@/api";
 import message from "@arco-design/web-vue/es/message";
+import { dayjs } from "@arco-design/web-vue/es/_utils/date";
 
 const formSearchParams = ref<API.UserQueryRequest>({});
 
@@ -140,10 +152,12 @@ const columns = [
   {
     title: "创建时间",
     dataIndex: "createTime",
+    slotName: "createTime",
   },
   {
     title: "更新时间",
     dataIndex: "updateTime",
+    slotName: "updateTime",
   },
   {
     title: "操作",
