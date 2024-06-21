@@ -8,6 +8,7 @@ import UserRegisterPage from "@/views/user/UserRegisterPage.vue";
 import AdminUserPage from "@/views/admin/AdminUserPage.vue";
 import AddAppPage from "@/views/app/AdminAppPage.vue";
 import AdminAppPage from "@/views/app/AdminAppPage.vue";
+import AdminQuestionPage from "@/views/question/AdminQuestionPage.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -19,6 +20,14 @@ export const routes: Array<RouteRecordRaw> = [
     path: "/admin/app",
     name: "应用管理",
     component: AdminAppPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+    },
+  },
+  {
+    path: "/admin/question",
+    name: "题目管理",
+    component: AdminQuestionPage,
     meta: {
       access: ACCESS_ENUM.ADMIN,
     },
