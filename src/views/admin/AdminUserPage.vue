@@ -1,5 +1,155 @@
-<script setup lang="ts"></script>
+<template>
+  <a-form
+    :model="searchParams"
+    :style="{ marginBottom: '20px' }"
+    layout="inline"
+    @submit="doSearch"
+  >
+    <a-form-item field="username" label="用户名">
+      <a-input v-model="searchParams.userName" placeholder="请输入用户名" />
+    </a-form-item>
+    <a-form-item field="userProfile" label="用户简介">
+      <a-input
+        v-model="formSearchParams.userProfile"
+        placeholder="请输入用户简介"
+      />
+    </a-form-item>
+    <a-form-item>
+      <a-button type="primary" html-type="submit" style="width: 100px">
+        搜索
+      </a-button>
+    </a-form-item>
+  </a-form>
+  <a-table
+    :columns="columns"
+    :data="dataList"
+    :pagination="{
+      showTotal: true,
+      pageSize: searchParams.pageSize,
+      current: searchParams.current,
+      total,
+    }"
+    @page-change="onPageChange"
+  >
+    <template #userAvatar="{ record }">
+      <a-img width="64" :src="record.userAvatar" />
+    </template>
+    <template #optional="{ record }">
+      <a-space>
+        <a-button status="danger" @click="doDelete(record)">删除</a-button>
+      </a-space>
+    </template>
+  </a-table>
+</template>
 
-<template></template>
+<script setup lang="ts">
+import { ref, watchEffect } from "vue";
+import {
+  deleteUserUsingPost,
+  listUserByPageUsingPost,
+} from "@/api/userController";
+import API from "@/api";
+import message from "@arco-design/web-vue/es/message";
+
+const formSearchParams = ref<API.UserQueryRequest>({});
+
+// 初始化搜索条件
+const initSearchParams = {
+  current: 1,
+  pageSize: 10,
+};
+
+const searchParams = ref<API.UserQueryRequest>({
+  ...initSearchParams,
+});
+const dataList = ref<API.User[]>([]);
+const total = ref(0);
+/**
+ * 加载数据
+ */
+const loadData = async () => {
+  const res = await listUserByPageUsingPost(searchParams.value);
+  if (res.data.code === 0) {
+    dataList.value = res.data.data?.records || [];
+    total.value = res.data.data?.total || 0;
+  } else {
+    message.error("获取数据失败，" + res.data.message);
+  }
+};
+
+const doSearch = () => {
+  searchParams.value = {
+    ...initSearchParams,
+    ...formSearchParams.value,
+  };
+};
+
+// 删除用户
+const doDelete = async (recoed: API.User) => {
+  if (!recoed.id) {
+    return;
+  }
+  const res = await deleteUserUsingPost({
+    id: recoed.id,
+  });
+  if (res.data.code === 0) {
+    loadData();
+  } else {
+    message.error("删除失败，" + res.data.message);
+  }
+};
+
+const onPageChange = (page: number) => {
+  searchParams.value = {
+    ...searchParams.value,
+    current: page,
+  };
+};
+
+// 监听搜索条件变化，重新加载数据
+watchEffect(() => {
+  loadData();
+});
+
+const columns = [
+  {
+    title: "id",
+    dataIndex: "id",
+  },
+  {
+    title: "账号",
+    dataIndex: "userAccount",
+  },
+  {
+    title: "用户名",
+    dataIndex: "userName",
+  },
+  {
+    title: "用户头像",
+    dataIndex: "userAvatar",
+    slotName: "userAvatar",
+  },
+  {
+    title: "用户简介",
+    dataIndex: "userProfile",
+  },
+  {
+    title: "权限",
+    dataIndex: "userRole",
+  },
+  {
+    title: "创建时间",
+    dataIndex: "createTime",
+  },
+  {
+    title: "更新时间",
+    dataIndex: "updateTime",
+  },
+  {
+    title: "操作",
+    slotName: "optional",
+  },
+];
+</script>
 
 <style scoped></style>
