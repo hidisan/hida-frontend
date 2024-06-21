@@ -9,6 +9,8 @@ import AdminUserPage from "@/views/admin/AdminUserPage.vue";
 import AddAppPage from "@/views/app/AdminAppPage.vue";
 import AdminAppPage from "@/views/app/AdminAppPage.vue";
 import AdminQuestionPage from "@/views/question/AdminQuestionPage.vue";
+import AdminScoringResultPage from "@/views/scoringResult/AdminScoringResultPage.vue";
+import AdminUserAnswerPage from "@/views/answer/AdminUserAnswerPage.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -28,6 +30,22 @@ export const routes: Array<RouteRecordRaw> = [
     path: "/admin/question",
     name: "题目管理",
     component: AdminQuestionPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+    },
+  },
+  {
+    path: "/admin/scoring_result",
+    name: "评分管理",
+    component: AdminScoringResultPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+    },
+  },
+  {
+    path: "/admin/user_answer",
+    name: "回答管理",
+    component: AdminUserAnswerPage,
     meta: {
       access: ACCESS_ENUM.ADMIN,
     },
