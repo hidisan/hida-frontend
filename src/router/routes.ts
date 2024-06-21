@@ -6,12 +6,36 @@ import NoAuthPage from "@/views/NoAuthPage.vue";
 import UserLoginPage from "@/views/user/UserLoginPage.vue";
 import UserRegisterPage from "@/views/user/UserRegisterPage.vue";
 import AdminUserPage from "@/views/admin/AdminUserPage.vue";
+import AddAppPage from "@/views/app/AdminAppPage.vue";
+import AdminAppPage from "@/views/app/AdminAppPage.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "home",
     component: HomeView,
+  },
+  {
+    path: "/admin/app",
+    name: "应用管理",
+    component: AdminAppPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+    },
+  },
+  {
+    path: "/add/app",
+    name: "创建应用",
+    component: AddAppPage,
+  },
+  {
+    path: "/add/app/:id",
+    name: "修改应用",
+    props: true,
+    component: AddAppPage,
+    meta: {
+      hideInMenu: true,
+    },
   },
   {
     path: "/admin/user",
