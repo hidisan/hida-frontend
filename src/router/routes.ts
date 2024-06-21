@@ -13,30 +13,30 @@ export const routes: Array<RouteRecordRaw> = [
     name: "home",
     component: HomeView,
   },
-  // {
-  //   path: "/admin/user",
-  //   name: "用户管理",
-  //   component: AdminUserPage,
-  //   meta: {
-  //     access: ACCESS_ENUM.ADMIN,
-  //   },
-  // },
-  // {
-  //   path: "/noAuth",
-  //   name: "无权限",
-  //   component: NoAuthPage,
-  //   meta: {
-  //     hideInMenu: true,
-  //   },
-  // },
-  // {
-  //   path: "/hide",
-  //   name: "隐藏页面",
-  //   component: HomeView,
-  //   meta: {
-  //     hideInMenu: true,
-  //   },
-  // },
+  {
+    path: "/admin/user",
+    name: "用户管理",
+    component: AdminUserPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+    },
+  },
+  {
+    path: "/noAuth",
+    name: "无权限",
+    component: NoAuthPage,
+    meta: {
+      hideInMenu: true,
+    },
+  },
+  {
+    path: "/hide",
+    name: "隐藏页面",
+    component: HomeView,
+    meta: {
+      hideInMenu: true,
+    },
+  },
   {
     path: "/user",
     name: "用户",

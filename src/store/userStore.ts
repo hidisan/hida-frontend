@@ -14,7 +14,7 @@ export const useLoginUserStore = defineStore("loginUser", () => {
 
   async function fetchLoginUser() {
     const res = await getLoginUserUsingGet();
-    if (res.data.code && res.data.data) {
+    if (res.data.code === 0 && res.data.data) {
       loginUser.value = res.data.data;
     } else {
       loginUser.value = { userRole: ACCESS_ENUM.NOT_LOGIN };
