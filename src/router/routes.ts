@@ -37,26 +37,26 @@ export const routes: Array<RouteRecordRaw> = [
   //     hideInMenu: true,
   //   },
   // },
-  // {
-  //   path: "/user",
-  //   name: "用户",
-  //   component: UserLayout,
-  //   children: [
-  //     {
-  //       path: "/user/login",
-  //       name: "用户登录",
-  //       component: UserLoginPage,
-  //     },
-  //     {
-  //       path: "/user/register",
-  //       name: "用户注册",
-  //       component: UserRegisterPage,
-  //     },
-  //   ],
-  //   meta: {
-  //     hideInMenu: true,
-  //   },
-  // },
+  {
+    path: "/user",
+    name: "用户",
+    component: UserLayout,
+    children: [
+      {
+        path: "/user/login",
+        name: "用户登录",
+        component: UserLoginPage,
+      },
+      {
+        path: "/user/register",
+        name: "用户注册",
+        component: UserRegisterPage,
+      },
+    ],
+    meta: {
+      hideInMenu: true,
+    },
+  },
   {
     path: "/about",
     name: "about",

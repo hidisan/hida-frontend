@@ -6,4 +6,6 @@ import "@arco-design/web-vue/dist/arco.css";
 import router from "./router";
 import "@/access";
 
-createApp(App).use(ArcoVue).use(router).mount("#app");
+const pinia = createPinia();
+
+createApp(App).use(ArcoVue).use(pinia).use(router).mount("#app");
