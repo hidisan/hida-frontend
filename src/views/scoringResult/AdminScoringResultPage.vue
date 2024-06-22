@@ -1,22 +1,36 @@
 <template>
   <a-form
-    :model="searchParams"
+    :model="formSearchParams"
     :style="{ marginBottom: '20px' }"
     layout="inline"
     @submit="doSearch"
   >
-    <a-form-item field="username" label="用户名">
+    <a-form-item field="resultName" label="结果名称">
       <a-input
+        v-model="formSearchParams.resultName"
+        placeholder="请输入结果名称"
         allow-clear
-        v-model="searchParams.userName"
-        placeholder="请输入用户名"
       />
     </a-form-item>
-    <a-form-item field="userProfile" label="用户简介">
+    <a-form-item field="resultDesc" label="结果描述">
       <a-input
+        v-model="formSearchParams.resultDesc"
+        placeholder="请输入结果描述"
         allow-clear
-        v-model="formSearchParams.userProfile"
-        placeholder="请输入用户简介"
+      />
+    </a-form-item>
+    <a-form-item field="appId" label="应用 id">
+      <a-input
+        v-model="formSearchParams.appId"
+        placeholder="请输入应用 id"
+        allow-clear
+      />
+    </a-form-item>
+    <a-form-item field="userId" label="用户 id">
+      <a-input
+        v-model="formSearchParams.userId"
+        placeholder="请输入用户 id"
+        allow-clear
       />
     </a-form-item>
     <a-form-item>
@@ -36,8 +50,8 @@
     }"
     @page-change="onPageChange"
   >
-    <template #userAvatar="{ record }">
-      <a-img width="64" :src="record.userAvatar" />
+    <template #resultPicture="{ record }">
+      <a-image width="64" :src="record.resultPicture" />
     </template>
     <template #createTime="{ record }">
       {{ dayjs(record.createTime).format("YYYY-MM-DD HH:mm:ss") }}
@@ -47,7 +61,7 @@
     </template>
     <template #optional="{ record }">
       <a-space>
-        <a-button status="danger" @click="doDelete(record)">删除</a-button>
+        <a-button status="danger" @click="doDelete(record)"> 删除</a-button>
       </a-space>
     </template>
   </a-table>
@@ -56,14 +70,14 @@
 <script setup lang="ts">
 import { ref, watchEffect } from "vue";
 import {
-  deleteUserUsingPost,
-  listUserByPageUsingPost,
-} from "@/api/userController";
+  deleteScoringResultUsingPost,
+  listScoringResultByPageUsingPost,
+} from "@/api/scoringResultController";
 import API from "@/api";
 import message from "@arco-design/web-vue/es/message";
 import { dayjs } from "@arco-design/web-vue/es/_utils/date";
 
-const formSearchParams = ref<API.UserQueryRequest>({});
+const formSearchParams = ref<API.ScoringResultQueryRequest>({});
 
 // 初始化搜索条件
 const initSearchParams = {
@@ -71,16 +85,16 @@ const initSearchParams = {
   pageSize: 10,
 };
 
-const searchParams = ref<API.UserQueryRequest>({
+const searchParams = ref<API.ScoringResultQueryRequest>({
   ...initSearchParams,
 });
-const dataList = ref<API.User[]>([]);
+const dataList = ref<API.ScoringResult[]>([]);
 const total = ref(0);
 /**
  * 加载数据
  */
 const loadData = async () => {
-  const res = await listUserByPageUsingPost(searchParams.value);
+  const res = await listScoringResultByPageUsingPost(searchParams.value);
   if (res.data.code === 0) {
     dataList.value = res.data.data?.records || [];
     total.value = res.data.data?.total || 0;
@@ -96,21 +110,23 @@ const doSearch = () => {
   };
 };
 
-// 删除用户
-const doDelete = async (recoed: API.User) => {
-  if (!recoed.id) {
+// 删除问题
+const doDelete = async (record: API.ScoringResult) => {
+  if (record.id) {
     return;
   }
-  const res = await deleteUserUsingPost({
-    id: recoed.id,
+  const res = await deleteScoringResultUsingPost({
+    id: record.id,
   });
   if (res.data.code === 0) {
+    message.success("删除成功");
     loadData();
   } else {
     message.error("删除失败，" + res.data.message);
   }
 };
 
+// table分页发生变化
 const onPageChange = (page: number) => {
   searchParams.value = {
     ...searchParams.value,
@@ -129,25 +145,33 @@ const columns = [
     dataIndex: "id",
   },
   {
-    title: "账号",
-    dataIndex: "userAccount",
+    title: "名称",
+    dataIndex: "resultName",
   },
   {
-    title: "用户名",
-    dataIndex: "userName",
+    title: "描述",
+    dataIndex: "resultDesc",
   },
   {
-    title: "用户头像",
-    dataIndex: "userAvatar",
-    slotName: "userAvatar",
+    title: "图片",
+    dataIndex: "resultPicture",
+    slotName: "resultPicture",
   },
   {
-    title: "用户简介",
-    dataIndex: "userProfile",
+    title: "结果属性",
+    dataIndex: "resultProp",
   },
   {
-    title: "权限",
-    dataIndex: "userRole",
+    title: "评分范围",
+    dataIndex: "resultScoreRange",
+  },
+  {
+    title: "应用 id",
+    dataIndex: "appId",
+  },
+  {
+    title: "用户 id",
+    dataIndex: "userId",
   },
   {
     title: "创建时间",
