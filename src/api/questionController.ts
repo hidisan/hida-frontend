@@ -128,3 +128,20 @@ export async function updateQuestionUsingPost(
     ...(options || {}),
   });
 }
+
+export async function aiGenerateQuestionUsingPost(
+  body: API.AiGenerateQuestionRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseListQuestionContentDTO_>(
+    "/api/question/ai_generate",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: body,
+      ...(options || {}),
+    }
+  );
+}

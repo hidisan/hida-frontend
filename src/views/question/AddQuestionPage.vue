@@ -15,6 +15,10 @@
         <a-button @click="addQuestion(questionContent.length)">
           底部添加题目
         </a-button>
+        <AiGenerateQuestionDrawer
+          :appId="appId"
+          :onSuccess="onAiGenerateSuccess"
+        />
         <div v-for="(question, index) in questionContent" :key="index">
           <a-space size="large">
             <h3>题目{{ index + 1 }}</h3>
@@ -100,6 +104,7 @@ import {
   listQuestionVoByPageUsingPost,
 } from "@/api/questionController";
 import message from "@arco-design/web-vue/es/message";
+import AiGenerateQuestionDrawer from "@/views/question/AiGenerateQuestionDrawer.vue";
 
 interface Props {
   appId: string;
@@ -222,6 +227,12 @@ const loadData = async () => {
       message.error("获取数据失败，" + res.data.message);
     }
   }
+};
+
+// AI成功生成题目后执行
+const onAiGenerateSuccess = (result: API.QuestionContentDTO[]) => {
+  message.success("AI生成题目成功，生成 ${result.length} 道题目");
+  questionContent.value = [...questionContent.value, ...result];
 };
 
 // 监听搜索条件变化，重新加载数据
