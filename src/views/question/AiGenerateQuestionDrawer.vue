@@ -20,7 +20,7 @@
         <a-form-item label="应用id">{{ appId }}</a-form-item>
         <a-form-item field="questionNumber" label="题目数量">
           <a-input-number
-            v-model="form.optionNumber"
+            v-model="form.questionNumber"
             min="0"
             max="20"
             placeholder="请输入题目数量"

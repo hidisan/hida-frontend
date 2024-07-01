@@ -18,6 +18,9 @@
         <AiGenerateQuestionDrawer
           :appId="appId"
           :onSuccess="onAiGenerateSuccess"
+          :onSSESuccess="onAiGenerateSuccessSSE"
+          :onSSEClose="onSSEClose"
+          :onSSEStart="onSSEStart"
         />
         <div v-for="(question, index) in questionContent" :key="index">
           <a-space size="large">
@@ -105,6 +108,7 @@ import {
 } from "@/api/questionController";
 import message from "@arco-design/web-vue/es/message";
 import AiGenerateQuestionDrawer from "@/views/question/AiGenerateQuestionDrawer.vue";
+import QuestionContentDTO = API.QuestionContentDTO;
 
 interface Props {
   appId: string;
@@ -229,12 +233,35 @@ const loadData = async () => {
   }
 };
 
-// AI成功生成题目后执行
+/**
+ * AI成功生成题目，添加到题目列表中
+ * @param result
+ */
 const onAiGenerateSuccess = (result: API.QuestionContentDTO[]) => {
   message.success("AI生成题目成功，生成 ${result.length} 道题目");
   questionContent.value = [...questionContent.value, ...result];
 };
-
+/**
+ * AI成功生成题目（SSE）
+ * @param result
+ */
+const onAiGenerateSuccessSSE = (result: QuestionContentDTO) => {
+  questionContent.value = [...questionContent.value, result];
+};
+/**
+ * SSE开始生成题目
+ * @param event
+ */
+const onSSEStart = (event: any) => {
+  message.success("开始生成");
+};
+/**
+ * SSE生成题目完毕
+ * @param event
+ */
+const onSSEClose = (event: any) => {
+  message.success("生成完毕");
+};
 // 监听搜索条件变化，重新加载数据
 watchEffect(() => {
   loadData();
